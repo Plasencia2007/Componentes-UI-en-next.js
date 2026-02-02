@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Nuevo Proyecto",
-  description: "Proyecto vacío creado con Antigravity",
+  title: "The Complete Showcase v12",
+  description: "Una librería de componentes premium creada con Antigravity.",
 };
 
 export default function RootLayout({

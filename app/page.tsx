@@ -168,6 +168,11 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -176,7 +181,32 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Bar,
   BarChart,
@@ -242,11 +272,19 @@ export default function Showcase() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [commandOpen, setCommandOpen] = React.useState(false);
   const [otp, setOtp] = React.useState("");
+  const [progress, setProgress] = React.useState(13);
+  const [mounted, setMounted] = React.useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { username: "", password: "" },
   });
+
+  React.useEffect(() => {
+    setMounted(true);
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 md:p-12 space-y-16 overflow-x-hidden">
@@ -283,7 +321,7 @@ export default function Showcase() {
               The Complete Showcase
             </h1>
             <p className="text-xl text-muted-foreground">
-              Explora los 22+ componentes y sus infinitas posibilidades.
+              Explora los 28+ componentes y sus infinitas posibilidades.
             </p>
           </div>
           <div className="flex gap-3">
@@ -792,61 +830,69 @@ export default function Showcase() {
                   <p className="text-xs font-bold text-muted-foreground uppercase">
                     Modo Barras
                   </p>
-                  <ChartContainer
-                    config={chartConfig}
-                    className="h-[150px] w-full"
-                  >
-                    <BarChart data={chartData}>
-                      <Bar
-                        dataKey="desktop"
-                        fill="var(--color-desktop)"
-                        radius={4}
-                      />
-                      <Bar
-                        dataKey="mobile"
-                        fill="var(--color-mobile)"
-                        radius={4}
-                      />
-                    </BarChart>
-                  </ChartContainer>
+                  <div className="h-[150px] w-full">
+                    {mounted && (
+                      <ChartContainer
+                        config={chartConfig}
+                        className="h-full w-full"
+                      >
+                        <BarChart data={chartData}>
+                          <Bar
+                            dataKey="desktop"
+                            fill="var(--color-desktop)"
+                            radius={4}
+                          />
+                          <Bar
+                            dataKey="mobile"
+                            fill="var(--color-mobile)"
+                            radius={4}
+                          />
+                        </BarChart>
+                      </ChartContainer>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <p className="text-xs font-bold text-muted-foreground uppercase">
                     Modo Área
                   </p>
-                  <ChartContainer
-                    config={chartConfig}
-                    className="h-[150px] w-full"
-                  >
-                    <AreaChart data={chartData}>
-                      <defs>
-                        <linearGradient
-                          id="fillDesktop"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
-                        >
-                          <stop
-                            offset="5%"
-                            stopColor="var(--color-desktop)"
-                            stopOpacity={0.8}
+                  <div className="h-[150px] w-full">
+                    {mounted && (
+                      <ChartContainer
+                        config={chartConfig}
+                        className="h-full w-full"
+                      >
+                        <AreaChart data={chartData}>
+                          <defs>
+                            <linearGradient
+                              id="fillDesktop"
+                              x1="0"
+                              y1="0"
+                              x2="0"
+                              y2="1"
+                            >
+                              <stop
+                                offset="5%"
+                                stopColor="var(--color-desktop)"
+                                stopOpacity={0.8}
+                              />
+                              <stop
+                                offset="95%"
+                                stopColor="var(--color-desktop)"
+                                stopOpacity={0.1}
+                              />
+                            </linearGradient>
+                          </defs>
+                          <Area
+                            dataKey="desktop"
+                            type="natural"
+                            fill="url(#fillDesktop)"
+                            stroke="var(--color-desktop)"
                           />
-                          <stop
-                            offset="95%"
-                            stopColor="var(--color-desktop)"
-                            stopOpacity={0.1}
-                          />
-                        </linearGradient>
-                      </defs>
-                      <Area
-                        dataKey="desktop"
-                        type="natural"
-                        fill="url(#fillDesktop)"
-                        stroke="var(--color-desktop)"
-                      />
-                    </AreaChart>
-                  </ChartContainer>
+                        </AreaChart>
+                      </ChartContainer>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -1150,7 +1196,7 @@ export default function Showcase() {
             <h2 className="text-3xl font-bold">Continuidad y Detalle</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* 15. Accordion - Multiple vs Single */}
+            {/* 16. Accordion - Multiple vs Single */}
             <Card className="flex flex-col shadow-xl lg:col-span-2">
               <CardHeader>
                 <CardTitle className="text-lg">Yo soy Accordion</CardTitle>
@@ -1198,7 +1244,7 @@ export default function Showcase() {
               </CardContent>
             </Card>
 
-            {/* 16. AspectRatio - Geometric Forms */}
+            {/* 17. AspectRatio - Geometric Forms */}
             <Card className="flex flex-col shadow-xl">
               <CardHeader>
                 <CardTitle className="text-lg">Yo soy AspectRatio</CardTitle>
@@ -1219,7 +1265,7 @@ export default function Showcase() {
               </CardContent>
             </Card>
 
-            {/* 17. Checkbox & Collapsible Mix */}
+            {/* 18. Checkbox & Collapsible Mix */}
             <Card className="flex flex-col shadow-xl">
               <CardHeader>
                 <CardTitle className="text-lg">Yo soy Checkbox</CardTitle>
@@ -1258,8 +1304,8 @@ export default function Showcase() {
             <h2 className="text-3xl font-bold">Experiencia Envolvente</h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* 18. Carousel - Advanced Layout */}
-            <div className="lg:col-span-8">
+            {/* 19. Carousel - Advanced Layout */}
+            <div className="lg:col-span-8 space-y-8">
               <Card className="shadow-2xl overflow-hidden border-0 bg-zinc-50 dark:bg-zinc-900">
                 <CardHeader>
                   <CardTitle>Yo soy Carousel</CardTitle>
@@ -1289,10 +1335,168 @@ export default function Showcase() {
                   </Carousel>
                 </CardContent>
               </Card>
+
+              {/* Nuevos componentes debajo del Carrusel */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                {/* 21. Popover - Floating Content */}
+                <Card className="flex flex-col shadow-xl border-primary/20 bg-background">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Yo soy Popover</CardTitle>
+                    <CardDescription>
+                      Contenido flotante interactivo.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex items-center justify-center py-6">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className="border-primary/50">
+                          Abrir Popover
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-80 border-2 shadow-2xl">
+                        <div className="grid gap-4">
+                          <div className="space-y-2">
+                            <h4 className="font-medium leading-none">
+                              Dimensiones
+                            </h4>
+                            <p className="text-sm text-muted-foreground">
+                              Ajusta el diseño.
+                            </p>
+                          </div>
+                          <div className="grid gap-2">
+                            <div className="grid grid-cols-3 items-center gap-4">
+                              <label htmlFor="width_final">Ancho</label>
+                              <Input
+                                id="width_final"
+                                defaultValue="100%"
+                                className="col-span-2 h-8"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </CardContent>
+                </Card>
+
+                {/* 22. Progress - Loading States */}
+                <Card className="flex flex-col shadow-xl bg-background">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Yo soy Progress</CardTitle>
+                    <CardDescription>Indicador de carga.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4 py-8">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
+                        <span>Estado</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <Progress value={progress} />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* 23. Radio Group - Selections */}
+                <Card className="flex flex-col shadow-xl bg-background">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Yo soy RadioGroup</CardTitle>
+                    <CardDescription>
+                      Opciones de selección única.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4 py-6">
+                    <RadioGroup defaultValue="comfortable">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="default" id="r1" />
+                        <Label htmlFor="r1">Default</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="comfortable" id="r2" />
+                        <Label htmlFor="r2">Comfortable</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="compact" id="r3" />
+                        <Label htmlFor="r3">Compact</Label>
+                      </div>
+                    </RadioGroup>
+                  </CardContent>
+                </Card>
+
+                {/* 24. Resizable - Flexible Layouts */}
+                <Card className="flex flex-col shadow-xl bg-background md:col-span-2 xl:col-span-3">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Yo soy Resizable</CardTitle>
+                    <CardDescription>
+                      Paneles con tamaño ajustable para layouts dinámicos.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="h-[200px] py-4">
+                    <ResizablePanelGroup
+                      direction="horizontal"
+                      className="min-h-[160px] w-full rounded-lg border"
+                    >
+                      <ResizablePanel defaultSize={25}>
+                        <div className="flex h-full items-center justify-center p-6 bg-zinc-50 dark:bg-zinc-900/50">
+                          <span className="font-semibold text-xs text-muted-foreground">
+                            Lateral
+                          </span>
+                        </div>
+                      </ResizablePanel>
+                      <ResizableHandle withHandle />
+                      <ResizablePanel defaultSize={75}>
+                        <ResizablePanelGroup direction="vertical">
+                          <ResizablePanel defaultSize={50}>
+                            <div className="flex h-full items-center justify-center p-6">
+                              <span className="font-semibold text-xs">
+                                Arriba
+                              </span>
+                            </div>
+                          </ResizablePanel>
+                          <ResizableHandle />
+                          <ResizablePanel defaultSize={50}>
+                            <div className="flex h-full items-center justify-center p-6">
+                              <span className="font-semibold text-xs">
+                                Abajo
+                              </span>
+                            </div>
+                          </ResizablePanel>
+                        </ResizablePanelGroup>
+                      </ResizablePanel>
+                    </ResizablePanelGroup>
+                  </CardContent>
+                </Card>
+
+                {/* 25. Scroll Area - Custom Scrolling */}
+                <Card className="flex flex-col shadow-xl bg-background md:col-span-1 xl:col-span-1">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Yo soy ScrollArea</CardTitle>
+                    <CardDescription>
+                      Barras de scroll personalizadas y elegantes.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="py-4">
+                    <ScrollArea className="h-40 w-full rounded-md border p-4">
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-medium leading-none">
+                          Tags
+                        </h4>
+                        {Array.from({ length: 15 }).map((_, i) => (
+                          <React.Fragment key={i}>
+                            <div className="text-sm">
+                              v1.2.0-beta-release-notes-{15 - i}
+                            </div>
+                            <div className="h-px w-full bg-border" />
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
 
-            {/* 19. Calendar - Final Touch */}
-            <div className="lg:col-span-4">
+            {/* 20. Calendar - Final Touch */}
+            <div className="lg:col-span-4 space-y-8">
               <Card className="shadow-2xl border-primary/10">
                 <CardHeader>
                   <CardTitle>Yo soy Calendar</CardTitle>
@@ -1308,6 +1512,85 @@ export default function Showcase() {
                   <Badge variant="outline" className="py-1 px-4 border-2">
                     Fecha: {date?.toLocaleDateString()}
                   </Badge>
+                </CardContent>
+              </Card>
+
+              {/* 26. Sidebar Demo Card */}
+              <Card className="shadow-2xl bg-zinc-900 text-white overflow-hidden border-0">
+                <CardHeader>
+                  <CardTitle className="text-white">Yo soy Sidebar</CardTitle>
+                  <CardDescription className="text-zinc-400">
+                    Navegación lateral profesional.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0 h-[300px] border-t border-zinc-800">
+                  <SidebarProvider defaultOpen={false}>
+                    <div className="flex h-full w-full">
+                      <Sidebar
+                        collapsible="icon"
+                        className="border-r border-zinc-800 bg-zinc-950"
+                      >
+                        <SidebarHeader className="p-2">
+                          <div className="flex items-center gap-2 px-2 py-1">
+                            <Rocket className="h-4 w-4 text-primary" />
+                            <span className="font-bold text-sm group-data-[state=collapsed]:hidden">
+                              V12 Pro
+                            </span>
+                          </div>
+                        </SidebarHeader>
+                        <SidebarContent>
+                          <SidebarGroup>
+                            <SidebarGroupLabel className="text-zinc-500">
+                              Dashboard
+                            </SidebarGroupLabel>
+                            <SidebarGroupContent>
+                              <SidebarMenu>
+                                <SidebarMenuItem>
+                                  <SidebarMenuButton
+                                    tooltip="Analytics"
+                                    className="text-zinc-300"
+                                  >
+                                    <BarChart className="h-4 w-4 text-zinc-300" />
+                                    <span>Analytics</span>
+                                  </SidebarMenuButton>
+                                </SidebarMenuItem>
+                                <SidebarMenuItem>
+                                  <SidebarMenuButton
+                                    tooltip="Users"
+                                    className="text-zinc-300"
+                                  >
+                                    <User className="h-4 w-4 text-zinc-300" />
+                                    <span>Users</span>
+                                  </SidebarMenuButton>
+                                </SidebarMenuItem>
+                              </SidebarMenu>
+                            </SidebarGroupContent>
+                          </SidebarGroup>
+                        </SidebarContent>
+                        <SidebarFooter className="p-2 border-t border-zinc-800">
+                          <SidebarMenuButton className="text-zinc-400">
+                            <Settings className="h-4 w-4" />
+                            <span>Ajustes</span>
+                          </SidebarMenuButton>
+                        </SidebarFooter>
+                      </Sidebar>
+                      <main className="flex-1 p-4 bg-zinc-900 flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                          <SidebarTrigger className="text-white hover:bg-zinc-800" />
+                          <Badge
+                            variant="secondary"
+                            className="bg-zinc-800 text-zinc-300"
+                          >
+                            Demo Live
+                          </Badge>
+                        </div>
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-[150px] bg-zinc-800" />
+                          <Skeleton className="h-20 w-full bg-zinc-800" />
+                        </div>
+                      </main>
+                    </div>
+                  </SidebarProvider>
                 </CardContent>
               </Card>
             </div>
